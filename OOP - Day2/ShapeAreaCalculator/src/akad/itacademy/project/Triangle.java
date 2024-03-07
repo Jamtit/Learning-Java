@@ -11,4 +11,5 @@ public class Triangle extends Shape{
         float rightTriangleArea = super.getAreaSize()/2;
         super.setAreaSize(rightTriangleArea);
     }
+
 }

@@ -3,6 +3,8 @@ package swed.itacademy.project;
 import java.util.Scanner;
 
 public class InputOutputManager {
+
+    // Why static everywhere?
     private static int shape;
     private static float data1;
     private static float data2;
