@@ -1,4 +1,4 @@
-package swed.itacademy.project;
+package akad.itacademy.project;
 
 public class UnknownShapeException extends Exception{
     private String message;

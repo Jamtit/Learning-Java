@@ -1,4 +1,4 @@
-package swed.itacademy.project;
+package akad.itacademy.project;
 
 import java.util.Scanner;
 

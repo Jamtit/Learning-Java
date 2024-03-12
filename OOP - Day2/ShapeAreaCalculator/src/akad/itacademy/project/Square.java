@@ -1,4 +1,4 @@
-package swed.itacademy.project;
+package akad.itacademy.project;
 
 public class Square extends Shape{
     public Square(float sideLength) {

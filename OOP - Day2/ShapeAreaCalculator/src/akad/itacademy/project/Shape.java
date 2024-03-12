@@ -1,4 +1,4 @@
-package swed.itacademy.project;
+package akad.itacademy.project;
 
 public abstract class Shape {
     private float areaSize;

@@ -1,4 +1,4 @@
-package swed.itacademy.project;
+package akad.itacademy.project;
 
 public class AreaCalculator {
     public static void main(String[] args){

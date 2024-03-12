@@ -1,4 +1,4 @@
-package swed.itacademy.project;
+package akad.itacademy.project;
 
 public class Triangle extends Shape{
     public Triangle(float sideLength1, float sideLength2) {
