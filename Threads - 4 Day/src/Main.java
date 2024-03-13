@@ -10,25 +10,12 @@ public class Main{
     final static int MIN_DUPLICATE_NAMES = 2;
 
     public static void main(String[] args) throws InterruptedException {
-//        long startTime = System.currentTimeMillis();
-//        try{
-//        Set<String> fetchedRunners = Runner.getAllRunnersIDs();
-//        fetchedRunners
-//                .forEach(Main::extracted);
-//        }catch (InterruptedException e){
-//            System.out.println(e.getLocalizedMessage());
-//        }
-//        Thread.sleep(5000);
-//        runners.forEach(System.out::println);
-//
-//        System.out.println("Execution time: " + (System.currentTimeMillis() - startTime));
-
         long startTime = System.currentTimeMillis();
 
         Set<String> runnersIds = Runner.getAllRunnersIDs();
         List<Runner> runners = Collections.synchronizedList(new ArrayList<>());
-        Map<String, List<Runner>> groupedByName = Collections.synchronizedMap(new HashMap<>());
-        Map<String, List<Runner>> groupedByBirthMonth = Collections.synchronizedMap(new HashMap<>());
+        Map<String, List<Runner>> groupedByName;
+        Map<String, List<Runner>> groupedByBirthMonth;
         AtomicInteger startingOrderCounter = new AtomicInteger();
 
         try (ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor()) {
@@ -46,37 +33,37 @@ public class Main{
                     throw new RuntimeException(e);
                 }
 
-                groupRunnersByName(runners, groupedByName);
                 executorService.shutdown();
             }));
         }
-        groupRunnersByBirthMonth(runners, groupedByBirthMonth);
+        groupedByName = groupRunnersByName(runners);
+        groupedByBirthMonth = groupRunnersByBirthMonth(runners);
         runners.sort(Comparator.comparing(Runner::getName));
-//        System.out.println(runners);
-        System.out.println(groupedByName);
-//        System.out.println(groupedByBirthMonth);
+        System.out.printf("""
+                =========================================
+                Runners grouped by name:
+                =========================================
+                
+                %s
+                
+                """, groupedByName);
+
+        System.out.printf("""
+                =========================================
+                Runners grouped by birth month:
+                =========================================
+                
+                %s
+                
+                """, groupedByBirthMonth);
         System.out.println("Execution time: " + (System.currentTimeMillis() - startTime));
 
 
 
     }
 
-//    private static Map<String, List<Runner>> groupRunnersByName(List<Runner> runnerList){
-//        Map<String, List<Runner>> groupingMap = new HashMap<>();
-//        runnerList.forEach(runner -> {
-//            String runnerName = runner.getName();
-//            if(getFrequencyOfName(runnerList, runnerName) >= MIN_DUPLICATE_NAMES){
-//                if(!groupingMap.containsKey(runnerName)){
-//                    groupingMap.put(runnerName, new ArrayList<>());
-//
-//                }
-//                groupingMap.get(runnerName).add(runner);
-//            }
-//
-//        });
-//        return groupingMap;
-//    }
-    private static void groupRunnersByName(List<Runner> runnerList, Map<String, List<Runner>> groupingMap){
+    private static Map<String, List<Runner>> groupRunnersByName(List<Runner> runnerList){
+        Map<String, List<Runner>> groupingMap = new HashMap<>();
         runnerList.forEach(runner -> {
             String runnerName = runner.getName();
             if(getFrequencyOfName(runnerList, runnerName) >= MIN_DUPLICATE_NAMES){
@@ -88,16 +75,19 @@ public class Main{
             }
 
         });
+        return groupingMap;
     }
 
-    private static void groupRunnersByBirthMonth(List<Runner> runnerList, Map<String, List<Runner>> groupingMap){
+    private static Map<String, List<Runner>> groupRunnersByBirthMonth(List<Runner> runnerList){
+        Map<String, List<Runner>> groupingMap = new HashMap<>();
         runnerList.forEach(runner ->{
-            String birthMonth = runner.getPersonalId().substring(4,6);
+            String birthMonth = runner.getPersonalId().substring(3,5);
             if(!groupingMap.containsKey(birthMonth)){
                 groupingMap.put(birthMonth, new ArrayList<>());
             }
             groupingMap.get(birthMonth).add(runner);
         });
+        return groupingMap;
     }
     private static int getFrequencyOfName(List<Runner> runnerList, String name){
         int counter = 0;
